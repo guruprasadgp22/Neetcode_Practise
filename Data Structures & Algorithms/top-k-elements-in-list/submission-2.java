@@ -1,3 +1,12 @@
+class Node {
+    int ele;
+    int freq;
+
+    Node(int ele, int freq) {
+        this.ele = ele;
+        this.freq = freq;
+    }
+}
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
         HashMap<Integer, Integer> map = new HashMap<>();
@@ -5,20 +14,17 @@ class Solution {
             map.put(ele, map.getOrDefault(ele, 0) + 1);
         }
 
-        PriorityQueue<int[]> queue =
-            new PriorityQueue<>((a, b) -> { return Integer.compare(a[1], b[1]); });
-
+        Node[] arr = new Node[map.size()];
+        int i = 0;
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            queue.add(new int[] {entry.getKey(), entry.getValue()});
-
-            while (queue.size() > k) {
-                queue.poll();
-            }
+            arr[i++] = new Node(entry.getKey(), entry.getValue());
         }
 
+        Arrays.sort(arr, (a, b) -> { return Integer.compare(b.freq, a.freq); });
+
         int res[] = new int[k];
-        for (int i = 0; i < k; i++) {
-            res[i] = queue.poll()[0];
+        for (i = 0; i < k; i++) {
+            res[i] = arr[i].ele;
         }
 
         return res;
